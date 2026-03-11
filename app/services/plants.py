@@ -8,7 +8,7 @@ from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 from app.schemas import AnalysisResult, Prediction
 
-MODEL_ID = "juppy44/plant-identification-2m-vit-b"
+MODEL_ID = "Sisigoks/FloraSense"
 TOP_K = 5
 
 

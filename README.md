@@ -1,6 +1,6 @@
 # Image Analyzer
 
-Minimal Python webapp for local plant species identification with `juppy44/plant-identification-2m-vit-b`.
+Minimal Python webapp for local plant species identification with `Sisigoks/FloraSense`.
 
 ## What it does
 
@@ -15,19 +15,13 @@ Minimal Python webapp for local plant species identification with `juppy44/plant
 - Hugging Face `transformers`
 - PyTorch with Apple Silicon `mps` support when available
 
-## Model Access
+## Model Choice
 
-`juppy44/plant-identification-2m-vit-b` is a gated Hugging Face model. You need to accept the model access conditions on Hugging Face before your machine can download the weights.
+This app uses `Sisigoks/FloraSense`, a public Hugging Face image classification model for plant identification. It can be downloaded and run locally without gated-access approval.
 
 Model page:
 
-- https://huggingface.co/juppy44/plant-identification-2m-vit-b
-
-After access is granted, authenticate locally if needed:
-
-```bash
-huggingface-cli login
-```
+- https://huggingface.co/Sisigoks/FloraSense
 
 ## Project structure
 
@@ -76,4 +70,5 @@ Open `http://127.0.0.1:8000`.
 - `Florence-2-base-ft` is a reasonable local starting point.
 - The first request will take time because the model weights need to load.
 - If `mps` hits an unsupported op, PyTorch can fall back to CPU with `PYTORCH_ENABLE_MPS_FALLBACK=1`.
-- This model predicts species names only from the image. Accuracy will improve if the photo clearly shows leaves, flowers, fruit, bark, or the whole plant.
+- This model predicts candidate species names only from the image. Accuracy will improve if the photo clearly shows leaves, flowers, fruit, bark, or the whole plant.
+- Treat the result as a ranked shortlist, especially for very similar species such as close tree varieties.
