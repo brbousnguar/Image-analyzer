@@ -9,19 +9,34 @@
   <body>
     <main class="page">
       <section class="hero">
-        <p class="eyebrow">Plant Species Identification</p>
-        <h1>Estimate the plant species from a photo.</h1>
+        <p class="eyebrow">Local Plant Identifier</p>
+        <h1>Identify a plant species from an image.</h1>
         <p class="lead">
-          Upload a plant image to get the top predicted species names and
-          confidence scores from a public plant-specific classifier that runs locally.
+          Paste or upload a plant photo to get a short ranked list of candidate species.
         </p>
+        <div class="hero-notes" aria-label="Supported input methods">
+          <span class="hero-chip">Upload PNG, JPG, or WEBP</span>
+          <span class="hero-chip">Paste from clipboard</span>
+          <span class="hero-chip">Fast ranked candidates</span>
+        </div>
       </section>
 
-      <section class="panel">
+      <section class="panel app-shell">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Input</p>
+            <h2>Add an image</h2>
+          </div>
+          <p class="section-note">Choose a file or paste from the clipboard.</p>
+        </div>
+
         <form id="analyze-form" class="upload-form">
-          <label for="image" class="upload-label">Choose an image</label>
+          <label for="image" class="file-picker">
+            <span class="file-picker-title">Choose image</span>
+            <span class="file-picker-subtitle">PNG, JPG, WEBP</span>
+          </label>
           <input id="image" name="file" type="file" accept="image/*" />
-          <button type="submit">Identify</button>
+          <button type="submit" class="primary-button">Identify Species</button>
         </form>
 
         <div
@@ -30,25 +45,46 @@
           tabindex="0"
           aria-label="Paste an image here"
         >
-          Click here and paste an image with Command+V or Control+V.
+          <div>
+            <p class="paste-zone-title">Paste image here</p>
+            <p class="paste-zone-copy">Click this area, then press Command+V or Control+V.</p>
+          </div>
         </div>
 
-        <div id="status" class="status" aria-live="polite"></div>
+        <div class="meta-row">
+          <div id="file-badge" class="file-badge">No image selected</div>
+          <div id="status" class="status" aria-live="polite"></div>
+        </div>
 
-        <div class="results">
-          <div class="preview-wrap">
-            <img id="preview" class="preview" alt="Uploaded preview" hidden />
-          </div>
+        <div class="content-grid">
+          <section class="preview-panel">
+            <h2 class="panel-title">Preview</h2>
 
-          <section id="analysis" class="analysis" hidden>
-            <article>
-              <h2>Model</h2>
-              <p id="model-id"></p>
+            <div class="preview-wrap">
+              <div id="preview-empty" class="preview-empty">
+                <p class="preview-empty-title">Your image preview will appear here.</p>
+                <p class="preview-empty-copy">
+                  Use upload or paste to check the photo before running identification.
+                </p>
+              </div>
+              <img id="preview" class="preview" alt="Uploaded preview" hidden />
+            </div>
+          </section>
+
+          <section id="analysis" class="analysis-panel" hidden>
+            <h2 class="panel-title">Results</h2>
+
+            <article class="model-card">
+              <span class="model-card-label">Model</span>
+              <p id="model-id" class="model-id"></p>
             </article>
 
-            <article>
-              <h2>Top Species Predictions</h2>
-              <ul id="predictions" class="detections"></ul>
+            <article class="results-card">
+              <div class="results-head">
+                <p class="results-title">Candidate species</p>
+                <p id="results-summary" class="results-summary"></p>
+              </div>
+              <ul id="predictions" class="predictions"></ul>
             </article>
           </section>
         </div>
