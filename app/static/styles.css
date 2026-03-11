@@ -109,6 +109,24 @@ button:disabled {
   color: var(--muted);
 }
 
+.paste-zone {
+  margin-top: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--muted);
+  text-align: center;
+  outline: none;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.paste-zone:focus,
+.paste-zone.is-active {
+  border-color: var(--accent);
+  background: rgba(255, 248, 242, 0.9);
+}
+
 .results {
   display: grid;
   gap: 1.5rem;

@@ -20,9 +20,18 @@
       <section class="panel">
         <form id="analyze-form" class="upload-form">
           <label for="image" class="upload-label">Choose an image</label>
-          <input id="image" name="file" type="file" accept="image/*" required />
+          <input id="image" name="file" type="file" accept="image/*" />
           <button type="submit">Identify</button>
         </form>
+
+        <div
+          id="paste-zone"
+          class="paste-zone"
+          tabindex="0"
+          aria-label="Paste an image here"
+        >
+          Click here and paste an image with Command+V or Control+V.
+        </div>
 
         <div id="status" class="status" aria-live="polite"></div>
 
