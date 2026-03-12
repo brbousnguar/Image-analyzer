@@ -27,6 +27,48 @@ All models are downloaded from Hugging Face and executed locally through `transf
 - `Dima806/butterfly_moth_species_detection` for butterflies and moths
 - `maceythm/vit-90-animals` for general animal species
 
+## How Hugging Face models are loaded and used
+
+The app uses `transformers` to pull each image classification model directly from Hugging Face and run it locally. This is the same pattern used in [app/services/plants.py](/Users/brbousnguar/Documents/Projects/Image-analyzer/app/services/plants.py).
+
+```python
+import torch
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModelForImageClassification
+
+repo_id = "Sisigoks/FloraSense"
+device = "mps" if torch.backends.mps.is_available() else "cpu"
+
+# Download the model and processor from Hugging Face
+model = AutoModelForImageClassification.from_pretrained(repo_id).to(device)
+processor = AutoImageProcessor.from_pretrained(repo_id)
+model.eval()
+
+# Run inference on a local image
+image = Image.open("example.jpg").convert("RGB")
+inputs = processor(images=image, return_tensors="pt")
+inputs = {key: value.to(device) for key, value in inputs.items()}
+
+with torch.no_grad():
+    logits = model(**inputs).logits
+
+probabilities = torch.softmax(logits, dim=-1)[0]
+topk = torch.topk(probabilities, k=5)
+
+for score, index in zip(topk.values, topk.indices):
+    label = model.config.id2label[index.item()]
+    print(label, round(score.item(), 4))
+```
+
+In this project, the same loading flow is wrapped in `SpeciesAnalyzer`, and models are selected by repo ID such as:
+
+```python
+self.model = AutoModelForImageClassification.from_pretrained(spec.repo_id).to(
+    self.device
+)
+self.processor = AutoImageProcessor.from_pretrained(spec.repo_id)
+```
+
 ## Project structure
 
 ```text
