@@ -36,8 +36,32 @@
             <span class="file-picker-subtitle">PNG, JPG, WEBP</span>
           </label>
           <input id="image" name="file" type="file" accept="image/*" />
+          <label class="model-field" for="model-select">
+            <span class="field-label">Model</span>
+            <select id="model-select" name="model_key" class="model-select">
+              {% for model in model_options %}
+              <option
+                value="{{ model.key }}"
+                data-domain="{{ model.domain }}"
+                data-summary="{{ model.summary }}"
+                data-params="{{ model.approx_params }}"
+                data-repo-id="{{ model.repo_id }}"
+                {% if model.key == default_model_key %}selected{% endif %}
+              >
+                {{ model.label }}
+              </option>
+              {% endfor %}
+            </select>
+          </label>
           <button type="submit" class="primary-button">Identify Species</button>
         </form>
+        <p id="model-help" class="model-help">
+          <strong>{{ default_model.label }}</strong>:
+          {{ default_model.summary }}
+          <span class="model-help-meta">
+            {{ default_model.domain }} · {{ default_model.approx_params }} · runs locally from Hugging Face
+          </span>
+        </p>
 
         <div
           id="paste-zone"

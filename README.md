@@ -1,11 +1,13 @@
 # Image Analyzer
 
-Minimal Python webapp for local plant species identification with `Sisigoks/FloraSense`.
+Minimal Python webapp for local flora and fauna image classification with selectable Hugging Face models.
 
 ## What it does
 
 - Upload an image from the browser
-- Return the top predicted plant species
+- Paste an image from the clipboard
+- Switch between multiple local Hugging Face models
+- Return the top predicted species candidates
 - Show confidence scores for each prediction
 
 ## Stack
@@ -15,13 +17,15 @@ Minimal Python webapp for local plant species identification with `Sisigoks/Flor
 - Hugging Face `transformers`
 - PyTorch with Apple Silicon `mps` support when available
 
-## Model Choice
+## Included models
 
-This app uses `Sisigoks/FloraSense`, a public Hugging Face image classification model for plant identification. It can be downloaded and run locally without gated-access approval.
+All models are downloaded from Hugging Face and executed locally through `transformers` and PyTorch.
 
-Model page:
-
-- https://huggingface.co/Sisigoks/FloraSense
+- `Sisigoks/FloraSense` for broad plant and flower identification
+- `umutbozdag/plant-identity` for common ornamental and houseplant classification with a ViT backbone
+- `prithivMLmods/Bird-Species-Classifier-526` for bird species
+- `Dima806/butterfly_moth_species_detection` for butterflies and moths
+- `maceythm/vit-90-animals` for general animal species
 
 ## Project structure
 
@@ -67,8 +71,12 @@ Open `http://127.0.0.1:8000`.
 
 ## Notes for a 24 GB MacBook Pro
 
-- `Florence-2-base-ft` is a reasonable local starting point.
-- The first request will take time because the model weights need to load.
+- The first request for each model will take time because the weights need to download and load.
 - If `mps` hits an unsupported op, PyTorch can fall back to CPU with `PYTORCH_ENABLE_MPS_FALLBACK=1`.
-- This model predicts candidate species names only from the image. Accuracy will improve if the photo clearly shows leaves, flowers, fruit, bark, or the whole plant.
-- Treat the result as a ranked shortlist, especially for very similar species such as close tree varieties.
+- The smaller ViT and DeiT style models in this app are a practical fit for 24 GB unified memory on Apple Silicon.
+- These models are domain-specific, so the best choice depends on the image:
+  - plants: `FloraSense` or `plant-identity`
+  - birds: `Bird-Species-Classifier-526`
+  - butterflies and moths: `butterfly_moth_species_detection`
+  - broader animals: `vit-90-animals`
+- Treat the result as a ranked shortlist, especially for visually similar species.

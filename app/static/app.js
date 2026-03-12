@@ -1,5 +1,7 @@
 const form = document.querySelector("#analyze-form");
 const fileInput = document.querySelector("#image");
+const modelSelect = document.querySelector("#model-select");
+const modelHelpNode = document.querySelector("#model-help");
 const pasteZone = document.querySelector("#paste-zone");
 const preview = document.querySelector("#preview");
 const previewEmpty = document.querySelector("#preview-empty");
@@ -48,6 +50,11 @@ pasteZone.addEventListener("focus", () => {
 
 pasteZone.addEventListener("blur", () => {
   pasteZone.classList.remove("is-active");
+});
+
+modelSelect.addEventListener("change", () => {
+  syncSelectedModelHelp();
+  statusNode.textContent = `${getSelectedModelLabel()} selected.`;
 });
 
 preview.addEventListener("load", () => {
@@ -104,6 +111,21 @@ function renderPreview(file) {
   statusNode.textContent = "Image ready for analysis.";
 }
 
+function getSelectedModelOption() {
+  return modelSelect.options[modelSelect.selectedIndex];
+}
+
+function getSelectedModelLabel() {
+  return getSelectedModelOption().textContent.trim();
+}
+
+function syncSelectedModelHelp() {
+  const option = getSelectedModelOption();
+  modelHelpNode.innerHTML = `<strong>${option.textContent.trim()}</strong>: ${option.dataset.summary} <span class="model-help-meta">${option.dataset.domain} · ${option.dataset.params} · runs locally from Hugging Face</span>`;
+}
+
+syncSelectedModelHelp();
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -115,10 +137,11 @@ form.addEventListener("submit", async (event) => {
 
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("model_key", modelSelect.value);
 
   submitButton.disabled = true;
   analysisNode.hidden = true;
-  statusNode.textContent = "Running plant species identification. The first request will be slower while the model loads.";
+  statusNode.textContent = `Running ${getSelectedModelLabel()}. The first request for each model will be slower while local weights load.`;
 
   try {
     const response = await fetch("/api/analyze", {
@@ -127,12 +150,23 @@ form.addEventListener("submit", async (event) => {
     });
 
     if (!response.ok) {
-      const payload = await response.json();
-      throw new Error(payload.detail || "Analysis failed.");
+      let message = "Analysis failed.";
+
+      try {
+        const payload = await response.json();
+        message = payload.detail || message;
+      } catch {
+        const text = await response.text();
+        if (text) {
+          message = text;
+        }
+      }
+
+      throw new Error(message);
     }
 
     const result = await response.json();
-    modelIdNode.textContent = result.model_id;
+    modelIdNode.textContent = `${result.model_name} · ${result.model_domain} · ${result.model_id}`;
     resultsSummaryNode.textContent = `${result.predictions.length} matches`;
     predictionsNode.replaceChildren(
       ...result.predictions.map((prediction) => {
@@ -159,7 +193,7 @@ form.addEventListener("submit", async (event) => {
       }),
     );
     analysisNode.hidden = false;
-    statusNode.textContent = `Returned ${result.predictions.length} candidate species.`;
+    statusNode.textContent = `Returned ${result.predictions.length} candidate species from ${result.model_name}.`;
   } catch (error) {
     resultsSummaryNode.textContent = "";
     statusNode.textContent = error.message;

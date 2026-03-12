@@ -7,5 +7,16 @@ class Prediction(BaseModel):
 
 
 class AnalysisResult(BaseModel):
+    model_name: str
     model_id: str
+    model_domain: str
     predictions: list[Prediction]
+
+
+class ModelOption(BaseModel):
+    key: str
+    label: str
+    repo_id: str
+    domain: str
+    summary: str
+    approx_params: str
