@@ -18,6 +18,7 @@ class ModelSpec:
     key: str
     label: str
     repo_id: str
+    repo_url: str
     domain: str
     summary: str
     approx_params: str
@@ -29,6 +30,7 @@ MODEL_SPECS = (
         key="flora_sense",
         label="FloraSense",
         repo_id="Sisigoks/FloraSense",
+        repo_url="https://huggingface.co/Sisigoks/FloraSense",
         domain="Plants and flowers",
         summary="Best default for broad plant species lookup with a plant-focused label space.",
         approx_params="~300M params",
@@ -37,6 +39,7 @@ MODEL_SPECS = (
         key="plant_vit",
         label="Plant Identity ViT",
         repo_id="umutbozdag/plant-identity",
+        repo_url="https://huggingface.co/umutbozdag/plant-identity",
         domain="Houseplants and common ornamental plants",
         summary="Ungated ViT classifier with published safetensors weights for common indoor and ornamental plant species.",
         approx_params="85.8M params",
@@ -45,6 +48,7 @@ MODEL_SPECS = (
         key="bird_526",
         label="Bird Species 526",
         repo_id="prithivMLmods/Bird-Species-Classifier-526",
+        repo_url="https://huggingface.co/prithivMLmods/Bird-Species-Classifier-526",
         domain="Bird species",
         summary="Specialized bird classifier with a large species set for fauna comparisons.",
         approx_params="~93M params",
@@ -53,6 +57,7 @@ MODEL_SPECS = (
         key="butterfly_moth",
         label="Butterfly and Moth Species",
         repo_id="Dima806/butterfly_moth_species_detection",
+        repo_url="https://huggingface.co/Dima806/butterfly_moth_species_detection",
         domain="Butterflies and moths",
         summary="Useful when the photo is insect-heavy and close enough for wing pattern cues.",
         approx_params="~86M params",
@@ -61,6 +66,7 @@ MODEL_SPECS = (
         key="animal_90",
         label="90 Animal Species",
         repo_id="maceythm/vit-90-animals",
+        repo_url="https://huggingface.co/maceythm/vit-90-animals",
         domain="General animal species",
         summary="Broad fauna baseline model for mammals and other common animal classes.",
         approx_params="~86M params",
@@ -100,6 +106,7 @@ class SpeciesAnalyzer:
         return AnalysisResult(
             model_name=self.spec.label,
             model_id=self.spec.repo_id,
+            model_url=self.spec.repo_url,
             model_domain=self.spec.domain,
             predictions=predictions,
         )
@@ -138,6 +145,7 @@ def get_model_options() -> list[ModelOption]:
             key=spec.key,
             label=spec.label,
             repo_id=spec.repo_id,
+            repo_url=spec.repo_url,
             domain=spec.domain,
             summary=spec.summary,
             approx_params=spec.approx_params,

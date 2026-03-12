@@ -46,6 +46,7 @@
                 data-summary="{{ model.summary }}"
                 data-params="{{ model.approx_params }}"
                 data-repo-id="{{ model.repo_id }}"
+                data-repo-url="{{ model.repo_url }}"
                 {% if model.key == default_model_key %}selected{% endif %}
               >
                 {{ model.label }}
@@ -56,11 +57,20 @@
           <button type="submit" class="primary-button">Identify Species</button>
         </form>
         <p id="model-help" class="model-help">
-          <strong>{{ default_model.label }}</strong>:
-          {{ default_model.summary }}
-          <span class="model-help-meta">
+          <strong id="model-help-label">{{ default_model.label }}</strong>:
+          <span id="model-help-summary">{{ default_model.summary }}</span>
+          <span id="model-help-meta" class="model-help-meta">
             {{ default_model.domain }} · {{ default_model.approx_params }} · runs locally from Hugging Face
           </span>
+          <a
+            id="model-help-link"
+            class="model-link"
+            href="{{ default_model.repo_url }}"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View model on Hugging Face
+          </a>
         </p>
 
         <div
@@ -101,6 +111,16 @@
             <article class="model-card">
               <span class="model-card-label">Model</span>
               <p id="model-id" class="model-id"></p>
+              <a
+                id="model-result-link"
+                class="model-link"
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                hidden
+              >
+                Open model page
+              </a>
             </article>
 
             <article class="results-card">

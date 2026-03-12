@@ -220,6 +220,20 @@ h1 {
   font-size: 0.92rem;
 }
 
+.model-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.45rem;
+  color: var(--accent-strong);
+  font-size: 0.94rem;
+  text-decoration-color: rgba(45, 79, 55, 0.35);
+  text-underline-offset: 0.16em;
+}
+
+.model-link:hover {
+  text-decoration-color: currentColor;
+}
+
 input[type="file"] {
   position: absolute;
   width: 1px;

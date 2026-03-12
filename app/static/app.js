@@ -1,13 +1,17 @@
 const form = document.querySelector("#analyze-form");
 const fileInput = document.querySelector("#image");
 const modelSelect = document.querySelector("#model-select");
-const modelHelpNode = document.querySelector("#model-help");
+const modelHelpLabelNode = document.querySelector("#model-help-label");
+const modelHelpSummaryNode = document.querySelector("#model-help-summary");
+const modelHelpMetaNode = document.querySelector("#model-help-meta");
 const pasteZone = document.querySelector("#paste-zone");
 const preview = document.querySelector("#preview");
 const previewEmpty = document.querySelector("#preview-empty");
 const statusNode = document.querySelector("#status");
 const analysisNode = document.querySelector("#analysis");
 const modelIdNode = document.querySelector("#model-id");
+const modelHelpLinkNode = document.querySelector("#model-help-link");
+const modelResultLinkNode = document.querySelector("#model-result-link");
 const predictionsNode = document.querySelector("#predictions");
 const resultsSummaryNode = document.querySelector("#results-summary");
 const fileBadgeNode = document.querySelector("#file-badge");
@@ -121,7 +125,11 @@ function getSelectedModelLabel() {
 
 function syncSelectedModelHelp() {
   const option = getSelectedModelOption();
-  modelHelpNode.innerHTML = `<strong>${option.textContent.trim()}</strong>: ${option.dataset.summary} <span class="model-help-meta">${option.dataset.domain} · ${option.dataset.params} · runs locally from Hugging Face</span>`;
+  modelHelpLabelNode.textContent = option.textContent.trim();
+  modelHelpSummaryNode.textContent = option.dataset.summary;
+  modelHelpMetaNode.textContent =
+    `${option.dataset.domain} · ${option.dataset.params} · runs locally from Hugging Face`;
+  modelHelpLinkNode.href = option.dataset.repoUrl;
 }
 
 syncSelectedModelHelp();
@@ -167,6 +175,8 @@ form.addEventListener("submit", async (event) => {
 
     const result = await response.json();
     modelIdNode.textContent = `${result.model_name} · ${result.model_domain} · ${result.model_id}`;
+    modelResultLinkNode.href = result.model_url;
+    modelResultLinkNode.hidden = false;
     resultsSummaryNode.textContent = `${result.predictions.length} matches`;
     predictionsNode.replaceChildren(
       ...result.predictions.map((prediction) => {

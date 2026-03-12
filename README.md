@@ -21,11 +21,11 @@ Minimal Python webapp for local flora and fauna image classification with select
 
 All models are downloaded from Hugging Face and executed locally through `transformers` and PyTorch.
 
-- `Sisigoks/FloraSense` for broad plant and flower identification
-- `umutbozdag/plant-identity` for common ornamental and houseplant classification with a ViT backbone
-- `prithivMLmods/Bird-Species-Classifier-526` for bird species
-- `Dima806/butterfly_moth_species_detection` for butterflies and moths
-- `maceythm/vit-90-animals` for general animal species
+- [`Sisigoks/FloraSense`](https://huggingface.co/Sisigoks/FloraSense) for broad plant and flower identification
+- [`umutbozdag/plant-identity`](https://huggingface.co/umutbozdag/plant-identity) for common ornamental and houseplant classification with a ViT backbone
+- [`prithivMLmods/Bird-Species-Classifier-526`](https://huggingface.co/prithivMLmods/Bird-Species-Classifier-526) for bird species
+- [`Dima806/butterfly_moth_species_detection`](https://huggingface.co/Dima806/butterfly_moth_species_detection) for butterflies and moths
+- [`maceythm/vit-90-animals`](https://huggingface.co/maceythm/vit-90-animals) for general animal species
 
 ## How Hugging Face models are loaded and used
 
@@ -37,12 +37,15 @@ from PIL import Image
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 repo_id = "Sisigoks/FloraSense"
+repo_url = f"https://huggingface.co/{repo_id}"
 device = "mps" if torch.backends.mps.is_available() else "cpu"
 
 # Download the model and processor from Hugging Face
 model = AutoModelForImageClassification.from_pretrained(repo_id).to(device)
 processor = AutoImageProcessor.from_pretrained(repo_id)
 model.eval()
+
+print(f"Loaded model from {repo_url}")
 
 # Run inference on a local image
 image = Image.open("example.jpg").convert("RGB")
